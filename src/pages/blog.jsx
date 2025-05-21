@@ -81,7 +81,6 @@ const Blog = () => {
               >
                 <motion.div
                   className="rounded-lg overflow-hidden"
-                  whileHover={{ boxShadow: "0 10px 25px rgba(1, 1, 112, 0.1)" }}
                   transition={{ duration: 0.3 }}
                 >
                   {/* Content */}

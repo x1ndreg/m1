@@ -61,7 +61,7 @@ const ServicesPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen from-[#010126] via-[#02025f] to-[#010136] overflow-hidden">
+    <div className="relative min-h-screen from-[#010126] via-[#010136] to-[#000090] overflow-hidden">
       {/* Navbar spacer */}
       <div className="h-28"></div>
 
@@ -194,7 +194,6 @@ const ServicesPage = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              whileHover={{ boxShadow: "0 10px 25px rgba(1, 1, 112, 0.2)" }}
             >
               <div className="flex flex-col md:flex-row items-start gap-8">
                 {/* Left side - 3D icon or illustration */}
@@ -340,7 +339,6 @@ const ServicesPage = () => {
       </div>
 
       {/* Bottom section */}
-      
     </div>
   );
 };

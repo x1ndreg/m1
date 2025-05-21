@@ -109,9 +109,14 @@ const PortfolioPage = () => {
 
         {/* Portfolio Content inside the textured area */}
         <div className="container mx-auto px-4 pt-50 pb-64 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#010170] text-center mb-12">
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-[#010170] text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             EXPLORE OUR SHOWCASE OF FEATURED WORKS
-          </h2>
+          </motion.h2>
           <div className="max-w-7xl mx-auto space-y-6">
             {portfolioData.map((item, index) => (
               <motion.div
@@ -190,12 +195,14 @@ const PortfolioPage = () => {
           <div className="max-w-7xl mx-auto relative flex items-center justify-between min-h-[500px]">
             {/* Left side - Text */}
             <div className="w-2/5">
-              <div className="text-[80px] sm:text-[100px] md:text-[120px] font-bold text-[#01177e] opacity-80 pointer-events-none">
+              <motion.div
+                className="text-[80px] sm:text-[100px] md:text-[120px] font-bold text-[#01177e] opacity-80 pointer-events-none"
+              >
                 AWARDS
                 <div className="absolute top-0 left-0 w-full text-[24px] sm:text-[28px] md:text-[30px] font-bold text-[#ffffff] pointer-events-none pt-16 sm:pt-20 md:pt-57 pl-26">
                   ACCOMPLISHMENTS
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Right side - Award Carousel */}

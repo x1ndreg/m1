@@ -13,12 +13,22 @@ function About() {
     >
       {/* Background Text */}
       <div className="absolute top-0 left-0 w-full">
-        <div className="text-[80px] sm:text-[100px] md:text-[100px] font-bold text-[#01177e] opacity-80 pointer-events-none text-center pt-4 sm:pt-8 md:pt-15">
+        <motion.div
+          className="text-[80px] sm:text-[100px] md:text-[100px] font-bold text-[#01177e] opacity-80 pointer-events-none text-center pt-4 sm:pt-8 md:pt-15"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           ABOUT US
-          <div className="absolute top-0 left-0 w-full text-[24px] sm:text-[28px] md:text-[30px] font-bold text-[#ffffff] pointer-events-none text-center pt-16 sm:pt-20 md:pt-28">
+          <motion.div
+            className="absolute top-0 left-0 w-full text-[24px] sm:text-[28px] md:text-[30px] font-bold text-[#ffffff] pointer-events-none text-center pt-16 sm:pt-20 md:pt-28"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             ABOUT US
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Content */}
@@ -44,7 +54,7 @@ function About() {
               transition={{ duration: 0.3 }}
             >
               <img
-                src="about-1.jpg"
+                src="/about/about2.jpeg"
                 alt="About MediaOne"
                 className="w-full h-full object-cover"
               />
@@ -55,7 +65,7 @@ function About() {
               transition={{ duration: 0.3 }}
             >
               <img
-                src="about-2.jpg"
+                src="/about/about1.jpeg"
                 alt="About MediaOne"
                 className="w-full h-full object-cover"
               />

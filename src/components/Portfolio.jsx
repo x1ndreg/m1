@@ -63,7 +63,7 @@ function Portfolio() {
     >
       {/* Background Title */}
       <motion.div
-        className="absolute top-0 left-0 w-full text-[80px] sm:text-[100px] md:text-[100px] font-bold text-[#01127b] opacity-80 pointer-events-none mt-6 pl-4 sm:pl-12 md:pl-25"
+        className="absolute top-0 left-0 w-full text-[80px] sm:text-[100px] md:text-[100px] font-bold text-[#01127b] opacity-80 pointer-events-none mt-5 pl-4 sm:pl-12 md:pl-11"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -73,7 +73,7 @@ function Portfolio() {
 
       {/* Main Title */}
       <motion.h2
-        className="relative text-2xl sm:text-3xl md:text-4xl font-bold text-[#cdcede] text-left pl-4 sm:pl-7 mb-8 sm:mb-12 md:mb-16"
+        className="relative text-2xl sm:text-3xl md:text-2xl font-bold text-[#cdcede] text-left pl-4 sm:pl-7 mb-8 sm:mb-12 md:mb-16"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -98,7 +98,7 @@ function Portfolio() {
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 brightness-35 group-hover:brightness-100"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 brightness-55 group-hover:brightness-100"
                 />
 
                 {/* Overlay */}
