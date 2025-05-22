@@ -119,7 +119,7 @@ const Blog = () => {
                     </motion.div>
 
                     <motion.p
-                      className="text-gray-700 mb-4"
+                      className="text-[#010170] mb-4"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.4 }}
@@ -146,7 +146,7 @@ const Blog = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 <motion.h3
-                  className="text-xl font-bold text-[#010170] mb-4"
+                  className="text-2xl font-bold text-[#010170] mb-4"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}

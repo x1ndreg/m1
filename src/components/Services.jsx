@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
 function Services() {
-  const [activeCard, setActiveCard] = useState(null);
-
   const serviceDetails = {
     development: {
       title: "DEVELOPMENT",
@@ -109,53 +107,38 @@ function Services() {
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto mt-16 sm:mt-24 md:mt-32">
         {/* Service Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 md:gap-10">
           {Object.entries(serviceDetails).map(([key, service], index) => (
             <motion.div
               key={key}
-              className={`rounded-lg shadow-lg cursor-pointer relative overflow-hidden transition-all duration-300 ${
-                activeCard === key ? "bg-[#010170]" : "bg-white"
-              }`}
+              className="relative overflow-hidden flex flex-col"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              onClick={() => setActiveCard(activeCard === key ? null : key)}
-              onMouseEnter={() => setActiveCard(key)}
-              onMouseLeave={() => setActiveCard(null)}
             >
-              {/* Default state (not hovered) */}
-              {activeCard !== key && (
-                <div className="p-4 sm:p-6 flex flex-col items-center justify-center h-[200px]">
-                  <img
-                    src={service.icon}
-                    alt={service.title}
-                    className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain mb-3 sm:mb-4"
-                  />
-                  <h3 className="text-lg sm:text-xl font-bold text-center text-[#000040] mt-2">
-                    {service.title}
-                  </h3>
-                </div>
-              )}
-
-              {/* Active state (hovered) */}
-              {activeCard === key && (
-                <div className="p-4 sm:p-6">
-                  <div className="flex">
-                    <div className="border-l-2 border-white pl-3 sm:pl-4 w-full">
-                      <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">
-                        {service.title}
-                      </h3>
-                      <ul className="space-y-1 sm:space-y-2 text-sm">
-                        {service.items.map((item, i) => (
-                          <li key={i} className="text-white">
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {/* Card Header with Icon and Title - With White Background */}
+              <div className="p-5 flex flex-col items-center justify-center bg-white rounded-t-lg">
+                <img
+                  src={service.icon}
+                  alt={service.title}
+                  className="w-24 h-24 sm:w-28 sm:h-28 object-contain mb-4"
+                />
+                <h3 className="text-xl font-bold text-center text-[#000040]">
+                  {service.title}
+                </h3>
+              </div>
+              
+              {/* Card Body with List of Services - No Background */}
+              <div className="p-5 bg-[#010170] text-white rounded-b-lg">
+                <ul className="space-y-3">
+                  {service.items.map((item, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className="inline-block w-2 h-2 bg-white rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
+                      <span className="text-sm">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </motion.div>
           ))}
         </div>
