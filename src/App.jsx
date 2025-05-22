@@ -15,6 +15,7 @@ import ServicesPage from "./pages/services";
 import PortfolioPage from "./pages/portfolio";
 import BlogPage from "./pages/blog";
 import ContactPage from "./pages/contact";
+import BackToTop from "./components/BackToTop";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
       <Footer />
+      <BackToTop />
     </>
   );
 }

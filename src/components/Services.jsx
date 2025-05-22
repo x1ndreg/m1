@@ -116,18 +116,19 @@ function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              {/* Card Header with Icon and Title - With White Background */}
+              {/* Card Header with Title and Icon - With White Background */}
               <div className="p-5 flex flex-col items-center justify-center bg-white rounded-t-lg">
+                {/* Title now comes before the image */}
+                <h3 className="text-xl font-bold text-center text-[#010170] mb-4">
+                  {service.title}
+                </h3>
                 <img
                   src={service.icon}
                   alt={service.title}
-                  className="w-24 h-24 sm:w-28 sm:h-28 object-contain mb-4"
+                  className="w-24 h-24 sm:w-28 sm:h-28 object-contain"
                 />
-                <h3 className="text-xl font-bold text-center text-[#000040]">
-                  {service.title}
-                </h3>
               </div>
-              
+
               {/* Card Body with List of Services - No Background */}
               <div className="p-5 bg-[#010170] text-white rounded-b-lg">
                 <ul className="space-y-3">
