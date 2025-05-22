@@ -7,21 +7,21 @@ const partnerLogos = [
     id: 1,
     name: "University of Mindanao",
     image: "/partnership/um.svg",
-    width: 120,
+    width: 100,
     height: 180
   },
   {
     id: 2,
     name: "Dctech Micro Services",
     image: "/partnership/dctech.svg",
-    width: 130,
+    width: 110,
     height: 180
   },
   { 
     id: 3, 
     name: "", 
     image: "/partnership/unknownlogo1.svg",
-    width: 120,
+    width: 100,
     height: 170
   },
   { 
@@ -35,56 +35,56 @@ const partnerLogos = [
     id: 5,
     name: "SMU",
     image: "/partnership/smu.svg",
-    width: 140,
+    width: 100,
     height: 190
   },
   {
     id: 6,
     name: "DMSF",
     image: "/partnership/dmsf.svg",
-    width: 140,
-    height: 140
+    width: 90,
+    height: 105
   },
   {
     id: 7,
     name: "Shock and Awe Trading",
     image: "/partnership/shock.svg",
-    width: 180,
-    height: 100
+    width: 150,
+    height: 80
   },
   {
     id: 8,
     name: "Partner 8",
     image: "/partnership/unknownlogo2.svg",
-    width: 140,
+    width: 100,
     height: 160
   },
   {
     id: 9,
     name: "LINNHOF",
     image: "/partnership/linnhoff.svg",
-    width: 160,
+    width: 120,
     height: 150
   },
   {
     id: 10,
     name: "UDSHMC",
     image: "/partnership/udshmc.svg",
-    width: 140,
+    width: 110,
     height: 160
   },
   {
     id: 11,
     name: "FUCOS CHEMISTRY",
     image: "/partnership/fucoschem.svg",
-    width: 200,
-    height: 100
+    width: 190,
+    height: 80
   },
   {
     id: 12,
     name: "KABACAN WATER DISTRICT",
     image: "/partnership/kabacan.svg",
-    width: 140,
+    width: 110,
     height: 160
   }
 ];
@@ -136,24 +136,22 @@ function LogoCarousel() {
                 key={`${logo.id}-${index}`}
                 className="flex-shrink-0 px-4 sm:px-6 md:px-8"
                 style={{
-                  width: "250px",
-                  "@media (min-width: 640px)": { width: "250px" },
-                  "@media (min-width: 768px)": { width: "250px" }
+                  width: "250px", // Increased from 180px
+                  "@media (min-width: 640px)": { width: "250px" }, // Increased from 180px
+                  "@media (min-width: 768px)": { width: "250px" } // Increased from 180px
                 }}
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="h-28 flex items-center justify-center">
+                <div className="h-25 flex items-center justify-center"> {/* Increased from h-20 to h-28 */}
                   <div className="flex items-center justify-center">
                     <img
                       src={logo.image}
                       alt={logo.name}
                       className="object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
                       style={{
-                        maxWidth: "180px",
-                        maxHeight: "100px",
-                        width: "auto",
-                        height: "auto",
+                        width: `${logo.width}px`,
+                        height: `${logo.height}px`,
                         objectFit: "contain"
                       }}
                       onError={(e) => {

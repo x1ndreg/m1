@@ -14,7 +14,7 @@ function Hero() {
         loop
         muted
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover aspect-video max-w-none z-0 opacity-55"
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-55"
       >
         <source src="/m1bg.mp4" type="video/mp4" />
       </video>
