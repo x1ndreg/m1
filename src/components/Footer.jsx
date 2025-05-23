@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -8,7 +7,6 @@ function Footer() {
     <footer className="w-full py-4 sm:py-6 bg-gray-100 border-t border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center justify-center text-center">
-          {/* Logo with Text */}
           <div className="mb-2 flex items-center">
             <img
               src="/Logo.svg"
@@ -19,8 +17,6 @@ function Footer() {
               ediaOne PH
             </span>
           </div>
-
-          {/* Copyright Text */}
           <p className="text-xs sm:text-sm text-gray-600">
             Copyright © {currentYear}. Powered By MediaOne Software Solutions
           </p>

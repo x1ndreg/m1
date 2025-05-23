@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useAppContent } from "../context/AppContent";
 
 function Hero() {
+  const { hero } = useAppContent();
+  
   return (
     <motion.div
       className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-black via-[#0a1358] to-[#000081]"
@@ -16,7 +19,7 @@ function Hero() {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-55"
       >
-        <source src="/m1bg.mp4" type="video/mp4" />
+        <source src={hero.video} type="video/mp4" />
       </video>
 
       {/* Main Content */}
@@ -37,14 +40,14 @@ function Hero() {
           <div className="space-y-2">
             <div className="flex items-baseline gap-2 sm:gap-4 justify-center md:justify-end">
               <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-bold">
-                WE
+                {hero.title.firstPart}
               </h1>
               <h1 className="text-[#0066FF] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-bold tracking-tight scale-y-115">
-                &lt;BUILD/&gt;
+                {hero.title.highlightedPart}
               </h1>
             </div>
             <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-bold">
-              AWESOMENESS
+              {hero.title.lastPart}
             </h2>
           </div>
           <motion.button
@@ -52,7 +55,7 @@ function Hero() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            SEE HOW WE DO IT
+            {hero.buttonText}
           </motion.button>
         </motion.div>
       </div>

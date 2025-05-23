@@ -5,7 +5,6 @@ import { FaArrowUp } from "react-icons/fa";
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when page is scrolled down
   const toggleVisibility = () => {
     if (window.pageYOffset > 300) {
       setIsVisible(true);
@@ -14,7 +13,7 @@ const BackToTop = () => {
     }
   };
 
-  // Set the top scroll position
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

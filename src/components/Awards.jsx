@@ -1,34 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
-
-const awardsData = [
-  {
-    id: 1,
-    logo: "/awards/Tech Behemoths.svg",
-    position: "left"
-  },
-  {
-    id: 2,
-    logo: "/awards/Meta.svg",
-    position: "right",
-    featured: true
-  },
-  {
-    id: 3,
-    logo: "/awards/Innovative Developers.svg",
-    position: "left"
-  },
-  {
-    id: 4,
-    logo: "/awards/Premier Software.svg",
-    position: "right"
-  }
-];
+import { useAppContent } from "../context/AppContent";
 
 function Awards() {
+  const { awards: awardsContent } = useAppContent();
+
   return (
     <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 md:px-16 bg-[#010170] overflow-hidden">
-      {/* Background Text */}
       <div className="absolute top-0 left-0 w-full">
         <motion.div
           className="text-[80px] sm:text-[100px] md:text-[120px] font-bold text-[#01177e] opacity-80 pointer-events-none text-center pt-4 sm:pt-8 md:pt-6"
@@ -36,23 +14,22 @@ function Awards() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          AWARDS
+          {awardsContent.title}
           <motion.div
             className="absolute top-0 left-0 w-full text-[24px] sm:text-[28px] md:text-[30px] font-bold text-[#ffffff] pointer-events-none text-center pt-16 sm:pt-20 md:pt-23"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            AWARDS & ACCOMPLISHMENTS
+            {awardsContent.subtitle}
           </motion.div>
         </motion.div>
       </div>
 
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto mt-20 sm:mt-24 md:mt-32 pt-8 sm:pt-12 md:pt-16">
-        {/* Awards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 md:gap-16 md:gap-x-24 md:gap-y-24 max-w-6xl mx-auto px-4">
-          {awardsData.map((award) => (
+          {awardsContent.awards.map((award) => (
             <motion.div
               key={award.id}
               className="flex justify-center items-center"
@@ -61,9 +38,7 @@ function Awards() {
               transition={{ duration: 0.5 }}
             >
               <div className="relative w-full flex items-center justify-center p-4">
-                {/* Award Image Container */}
                 <div className="relative flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                  {/* Award Logo */}
                   <img
                     src={award.logo}
                     alt="Award"
