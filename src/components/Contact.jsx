@@ -25,7 +25,7 @@ function Contact() {
       formDataToSend.append("access_key", "bbd83f87-5d24-4750-aad5-3e60ccece838");
       formDataToSend.append("from_name", "MediaonePH");
       formDataToSend.append("subject", "New Contact Form Submission");
-      formDataToSend.append("To: ", "gvbsr55@gmail.com");
+      formDataToSend.append("To: ", "ruinze@mediaoneph.com");
 
       // Map form fields to Web3Forms expected field names
       formDataToSend.append("name", `${formData.firstName} ${formData.lastName}`);
