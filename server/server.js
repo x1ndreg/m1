@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
     // Accept images only
@@ -69,24 +69,24 @@ const pool = mysql.createPool({
 });
 
 // Create table if it doesn't exist
-pool.query(`
-  CREATE TABLE IF NOT EXISTS blog_posts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    image VARCHAR(255) NOT NULL,
-    date VARCHAR(50) NOT NULL,
-    link VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  )
-`, (err) => {
-  if (err) {
-    console.error('Error creating table:', err);
-  } else {
-    console.log('Table created or already exists');
-  }
-});
+// pool.query(`
+//   CREATE TABLE IF NOT EXISTS blog_posts (
+//     id INT AUTO_INCREMENT PRIMARY KEY,
+//     title VARCHAR(255) NOT NULL,
+//     content TEXT NOT NULL,
+//     image VARCHAR(255) NOT NULL,
+//     date VARCHAR(50) NOT NULL,
+//     link VARCHAR(255) NOT NULL,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+//   )
+// `, (err) => {
+//   if (err) {
+//     console.error('Error creating table:', err);
+//   } else {
+//     console.log('Table created or already exists');
+//   }
+// });
 
 // Routes
 app.get('/api/posts', async (req, res) => {
@@ -102,14 +102,14 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
     console.log('Received file:', req.file);
     console.log('Received body:', req.body);
-    
+
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
-    
+
     const [result] = await pool.promise().query(
       'INSERT INTO blog_posts (title, content, image, date, link) VALUES (?, ?, ?, ?, ?)',
       [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link]
     );
-    
+
     const [newPost] = await pool.promise().query('SELECT * FROM blog_posts WHERE id = ?', [result.insertId]);
     console.log('Saved post:', newPost[0]);
     res.status(201).json(newPost[0]);
@@ -123,14 +123,14 @@ app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
   try {
     console.log('Update - Received file:', req.file);
     console.log('Update - Received body:', req.body);
-    
+
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
-    
+
     await pool.promise().query(
       'UPDATE blog_posts SET title = ?, content = ?, image = ?, date = ?, link = ? WHERE id = ?',
       [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, req.params.id]
     );
-    
+
     const [updatedPost] = await pool.promise().query('SELECT * FROM blog_posts WHERE id = ?', [req.params.id]);
     console.log('Updated post:', updatedPost[0]);
     res.json(updatedPost[0]);
@@ -143,14 +143,14 @@ app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
 app.delete('/api/posts/:id', async (req, res) => {
   try {
     const [post] = await pool.promise().query('SELECT image FROM blog_posts WHERE id = ?', [req.params.id]);
-    
+
     if (post[0] && post[0].image) {
       const imagePath = path.join(__dirname, 'uploads', path.basename(post[0].image));
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath);
       }
     }
-    
+
     await pool.promise().query('DELETE FROM blog_posts WHERE id = ?', [req.params.id]);
     res.json({ message: 'Post deleted successfully' });
   } catch (error) {
@@ -161,4 +161,4 @@ app.delete('/api/posts/:id', async (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-}); 
+});
