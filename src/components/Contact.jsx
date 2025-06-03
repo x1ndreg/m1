@@ -221,15 +221,19 @@ function Contact() {
             ))}
             <button
               type="submit"
-              className="w-full py-2 sm:py-3 bg-[#007bff] text-white font-medium uppercase tracking-wider rounded hover:bg-[#0069d9] transition-colors text-sm sm:text-base"
+              className="w-full py-2 sm:py-3 bg-[#0f00fe] text-white font-medium uppercase tracking-wider rounded hover:bg-[#0069d9] transition-colors text-sm sm:text-base"
             >
               {contactContent.submitButtonText}
             </button>
             {status === "success" && (
-              <p className="text-green-500 text-sm text-center">Message sent successfully!</p>
+              <p className="text-green-500 text-sm text-center">
+                Message sent successfully!
+              </p>
             )}
             {status === "error" && (
-              <p className="text-red-500 text-sm text-center">Failed to send message. Please try again.</p>
+              <p className="text-red-500 text-sm text-center">
+                Failed to send message. Please try again.
+              </p>
             )}
           </form>
         </motion.div>

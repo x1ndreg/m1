@@ -1,10 +1,47 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAppContent } from "../context/AppContent";
+
+const truncateContent = (content, maxLength = 500) => {
+  if (!content) return "";
+  if (content.length <= maxLength) return content;
+  return content.slice(0, maxLength) + "...";
+};
 
 const Blog = () => {
   const { pages: { blog: blogContent } } = useAppContent();
-  const blogPosts = blogContent.posts;
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showOldBlogsModal, setShowOldBlogsModal] = useState(false);
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/posts');
+      const data = await response.json();
+      setBlogPosts(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setLoading(false);
+    }
+  };
+
+  const toggleOldBlogsModal = () => {
+    setShowOldBlogsModal(!showOldBlogsModal);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#000028] via-[#000000] to-[#00005a] flex items-center justify-center">
+        <div className="text-white text-2xl">Loading...</div>
+      </div>
+    );
+  }
+
   const recentBlogs = blogPosts.slice(1, 4);
 
   return (
@@ -76,12 +113,25 @@ const Blog = () => {
                       />
                     </motion.div>
                     <motion.p
-                      className="text-[#010170] mb-4"
+                      className="text-[#010170] mb-4 text-justify"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.4 }}
                     >
-                      {blogPosts[0].content}
+                      {blogPosts[0].content.length > 250 ? (
+                        <>
+                          {truncateContent(blogPosts[0].content, 500)}
+                          <a
+                            href={blogPosts[0].link}
+                            className="ml-2 inline-block font-semibold text-[#010170] transition-all duration-200 hover:text-[#0101a0] hover:translate-x-1"
+                            style={{ cursor: "pointer" }}
+                          >
+                            Read more &gt;
+                          </a>
+                        </>
+                      ) : (
+                        blogPosts[0].content
+                      )}
                     </motion.p>
                   </div>
                 </motion.div>

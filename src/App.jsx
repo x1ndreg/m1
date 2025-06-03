@@ -15,6 +15,7 @@ import ServicesPage from "./pages/services";
 import PortfolioPage from "./pages/portfolio";
 import BlogPage from "./pages/blog";
 import ContactPage from "./pages/contact";
+import BlogAdmin from "./pages/admin/BlogAdmin";
 import BackToTop from "./components/BackToTop";
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Route path="/portfolio" element={<PortfolioPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/admin/blog" element={<BlogAdmin />} />
       </Routes>
       <Footer />
       <BackToTop />
