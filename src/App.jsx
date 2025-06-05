@@ -17,9 +17,8 @@ import BlogPage from "./pages/blog";
 import AllBlogsPage from "./pages/all-blogs";
 import ContactPage from "./pages/contact";
 import BlogAdmin from "./pages/admin/BlogAdmin";
-import Login from "./pages/admin/Login";
-import ProtectedRoute from "./components/ProtectedRoute";
 import BackToTop from "./components/BackToTop";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -49,15 +48,8 @@ function App() {
         <Route path="/all-blogs" element={<AllBlogsPage />} />
         <Route path="/all-blogs/:slug" element={<AllBlogsPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/admin/login" element={<Login />} />
-        <Route
-          path="/admin/blog"
-          element={
-            <ProtectedRoute>
-              <BlogAdmin />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/admin/blog" element={<BlogAdmin />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
       <BackToTop />

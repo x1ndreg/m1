@@ -22,7 +22,7 @@ const ContactPage = () => {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("access_key", "bbd83f87-5d24-4750-aad5-3e60ccece838");
+      formDataToSend.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
       formDataToSend.append("from_name", "MediaonePH");
       formDataToSend.append("subject", "New Contact Form Submission");
       formDataToSend.append("To: ", "ruinze@mediaoneph.com");

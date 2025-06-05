@@ -83,10 +83,38 @@ const Blog = () => {
     return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/${imagePath}`;
   };
 
-  if (loading || !blogPosts.length || !featuredPost) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#000028] via-[#000000] to-[#00005a] flex items-center justify-center">
         <div className="text-white text-2xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!blogPosts.length) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#000028] via-[#000000] to-[#00005a] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">No Blog Posts Available</h2>
+          <p className="text-white text-lg">Check back later for new content!</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!featuredPost) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#000028] via-[#000000] to-[#00005a] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Post Not Found</h2>
+          <p className="text-white text-lg">The requested blog post could not be found.</p>
+          <Link
+            to="/blog"
+            className="inline-block mt-4 bg-[#010170] text-white px-6 py-2 rounded-md hover:bg-[#0101a0] transition-colors"
+          >
+            Return to Blog
+          </Link>
+        </div>
       </div>
     );
   }

@@ -180,11 +180,8 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
 
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
     const slug = slugify(req.body.title);
-    const slug = slugify(req.body.title);
 
     const [result] = await pool.promise().query(
-      'INSERT INTO blog_posts (title, content, image, date, link, slug) VALUES (?, ?, ?, ?, ?, ?)',
-      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug]
       'INSERT INTO blog_posts (title, content, image, date, link, slug) VALUES (?, ?, ?, ?, ?, ?)',
       [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug]
     );
@@ -205,11 +202,8 @@ app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
 
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
     const slug = slugify(req.body.title);
-    const slug = slugify(req.body.title);
 
     await pool.promise().query(
-      'UPDATE blog_posts SET title = ?, content = ?, image = ?, date = ?, link = ?, slug = ? WHERE id = ?',
-      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug, req.params.id]
       'UPDATE blog_posts SET title = ?, content = ?, image = ?, date = ?, link = ?, slug = ? WHERE id = ?',
       [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug, req.params.id]
     );

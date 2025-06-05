@@ -5,7 +5,9 @@ import { useAppContent } from "../context/AppContent";
 function Contact() {
   const { contact: contactContent } = useAppContent();
   const [formData, setFormData] = useState(
-    Object.fromEntries(contactContent.formFields.map(field => [field.name, ""]))
+    Object.fromEntries(
+      contactContent.formFields.map((field) => [field.name, ""])
+    )
   );
   const [status, setStatus] = useState("");
 
@@ -22,13 +24,19 @@ function Contact() {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
+      formDataToSend.append(
+        "access_key",
+        import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
+      );
       formDataToSend.append("from_name", "MediaonePH");
       formDataToSend.append("subject", "New Contact Form Submission");
       formDataToSend.append("To: ", "ruinze@mediaoneph.com");
 
       // Map form fields to Web3Forms expected field names
-      formDataToSend.append("name", `${formData.firstName} ${formData.lastName}`);
+      formDataToSend.append(
+        "name",
+        `${formData.firstName} ${formData.lastName}`
+      );
       formDataToSend.append("email", formData.email);
       formDataToSend.append("phone", formData.phone);
       formDataToSend.append("message", formData.message);
@@ -46,7 +54,9 @@ function Contact() {
       if (data.success) {
         setStatus("success");
         setFormData(
-          Object.fromEntries(contactContent.formFields.map(field => [field.name, ""]))
+          Object.fromEntries(
+            contactContent.formFields.map((field) => [field.name, ""])
+          )
         );
       } else {
         setStatus("error");
@@ -227,7 +237,7 @@ function Contact() {
             </button>
             {status === "success" && (
               <p className="text-green-500 text-sm text-center">
-                Message sent successfully!
+                Thank you for your message. We'll get back to you soon!
               </p>
             )}
             {status === "error" && (
