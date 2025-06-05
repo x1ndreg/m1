@@ -88,11 +88,39 @@ const pool = mysql.createPool({
 //   }
 // });
 
+// Slugify utility
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/&/g, '-and-')          // Replace & with 'and'
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents
+    .replace(/[^a-z0-9-]/g, '')      // Remove all non-word chars
+    .replace(/--+/g, '-')            // Replace multiple - with single -
+    .replace(/^-+/, '')              // Trim - from start of text
+    .replace(/-+$/, '');             // Trim - from end of text
+}
+
 // Routes
 app.get('/api/posts', async (req, res) => {
   try {
     const [rows] = await pool.promise().query('SELECT * FROM blog_posts ORDER BY created_at DESC');
     res.json(rows);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Add new endpoint for fetching a single post
+app.get('/api/posts/:id', async (req, res) => {
+  try {
+    const [rows] = await pool.promise().query('SELECT * FROM blog_posts WHERE id = ?', [req.params.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    res.json(rows[0]);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -104,10 +132,11 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
     console.log('Received body:', req.body);
 
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
+    const slug = slugify(req.body.title);
 
     const [result] = await pool.promise().query(
-      'INSERT INTO blog_posts (title, content, image, date, link) VALUES (?, ?, ?, ?, ?)',
-      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link]
+      'INSERT INTO blog_posts (title, content, image, date, link, slug) VALUES (?, ?, ?, ?, ?, ?)',
+      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug]
     );
 
     const [newPost] = await pool.promise().query('SELECT * FROM blog_posts WHERE id = ?', [result.insertId]);
@@ -125,10 +154,11 @@ app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
     console.log('Update - Received body:', req.body);
 
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
+    const slug = slugify(req.body.title);
 
     await pool.promise().query(
-      'UPDATE blog_posts SET title = ?, content = ?, image = ?, date = ?, link = ? WHERE id = ?',
-      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, req.params.id]
+      'UPDATE blog_posts SET title = ?, content = ?, image = ?, date = ?, link = ?, slug = ? WHERE id = ?',
+      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug, req.params.id]
     );
 
     const [updatedPost] = await pool.promise().query('SELECT * FROM blog_posts WHERE id = ?', [req.params.id]);
@@ -153,6 +183,19 @@ app.delete('/api/posts/:id', async (req, res) => {
 
     await pool.promise().query('DELETE FROM blog_posts WHERE id = ?', [req.params.id]);
     res.json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Endpoint to fetch a post by slug
+app.get('/api/posts/slug/:slug', async (req, res) => {
+  try {
+    const [rows] = await pool.promise().query('SELECT * FROM blog_posts WHERE slug = ?', [req.params.slug]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    res.json(rows[0]);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

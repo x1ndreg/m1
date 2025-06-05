@@ -19,7 +19,7 @@ const ContactPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("access_key", "bbd83f87-5d24-4750-aad5-3e60ccece838");

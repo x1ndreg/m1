@@ -5,7 +5,7 @@ import { useAppContent } from "../context/AppContent";
 const About = () => {
   const { pages } = useAppContent();
   const aboutPage = pages.about;
-  
+
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#000028] via-[#020247] to-[#000051] overflow-hidden">
       <div className="h-28"></div>

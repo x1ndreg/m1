@@ -3,21 +3,13 @@ import { motion } from "framer-motion";
 import { useAppContent } from "../context/AppContent";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-const truncateContent = (content, maxLength = 500) => {
-  if (!content) return "";
-  if (content.length <= maxLength) return content;
-  return content.slice(0, maxLength) + "...";
-};
-
-const Blog = () => {
+const AllBlogs = () => {
   const { pages: { blog: blogContent } } = useAppContent();
   const [blogPosts, setBlogPosts] = useState([]);
   const [featuredPost, setFeaturedPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showOldBlogsModal, setShowOldBlogsModal] = useState(false);
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     fetchPosts();
@@ -34,22 +26,16 @@ const Blog = () => {
     // eslint-disable-next-line
   }, [slug, blogPosts]);
 
-  useEffect(() => { setIsExpanded(false); }, [featuredPost]);
-
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const fetchPosts = async () => {
     try {
       const response = await fetch(`${API_URL}/api/posts`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
       const data = await response.json();
       setBlogPosts(data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching posts:', error);
-      setBlogPosts([]);
       setLoading(false);
     }
   };
@@ -58,29 +44,19 @@ const Blog = () => {
     try {
       const response = await fetch(`${API_URL}/api/posts/slug/${slug}`);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        setFeaturedPost(null);
+        return;
       }
       const data = await response.json();
       setFeaturedPost(data);
     } catch (error) {
-      console.error('Error fetching featured post:', error);
       setFeaturedPost(null);
     }
   };
 
   const handleRecentClick = (post) => {
-    navigate(`/blog/${post.slug}`);
+    navigate(`/all-blogs/${post.slug}`);
     setFeaturedPost(post);
-  };
-
-  const toggleOldBlogsModal = () => {
-    setShowOldBlogsModal(!showOldBlogsModal);
-  };
-
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/placeholder-image.jpg';
-    if (imagePath.startsWith('http')) return imagePath;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/${imagePath}`;
   };
 
   if (loading || !blogPosts.length || !featuredPost) {
@@ -91,8 +67,8 @@ const Blog = () => {
     );
   }
 
-  // Exclude featured from recents
-  const recentBlogs = blogPosts.filter(post => post.id !== featuredPost.id).slice(0, 3);
+  // All blogs except featured
+  const allBlogs = blogPosts.filter(post => post.id !== featuredPost.id);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#000028] via-[#000000] to-[#00005a] overflow-hidden pb-40">
@@ -104,7 +80,7 @@ const Blog = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {blogContent.title}
+          All Blogs
         </motion.h1>
       </div>
       <div className="relative">
@@ -153,13 +129,9 @@ const Blog = () => {
                       className="relative mb-4"
                     >
                       <img
-                        src={getImageUrl(featuredPost.image)}
+                        src={featuredPost.image}
                         alt={featuredPost.title}
                         className="w-full h-auto object-cover rounded-lg"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/placeholder-image.jpg';
-                        }}
                       />
                     </motion.div>
                     <motion.p
@@ -185,10 +157,10 @@ const Blog = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  {blogContent.recentBlogsTitle}
+                  All Blogs
                 </motion.h3>
                 <div className="space-y-4">
-                  {recentBlogs.map((post, index) => (
+                  {allBlogs.map((post, index) => (
                     <motion.div
                       key={post.id}
                       className="rounded-lg overflow-hidden shadow-lg relative text-center"
@@ -202,13 +174,9 @@ const Blog = () => {
                     >
                       <div className="relative h-40 overflow-hidden">
                         <img
-                          src={getImageUrl(post.image)}
+                          src={post.image}
                           alt={post.title}
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/placeholder-image.jpg';
-                          }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(31,20,100,0)] via-[rgba(60,40,150,0.3)] to-[#31328a]"></div>
                         <div className="absolute top-2 left-2 bg-[#010170] text-white text-xs font-semibold py-1 px-2 rounded">
@@ -244,33 +212,6 @@ const Blog = () => {
                       </div>
                     </motion.div>
                   ))}
-                  <motion.div
-                    className="mt-6 text-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.4 }}
-                  >
-                    <Link
-                      to="/all-blogs"
-                      className="inline-flex items-center justify-center bg-[#010170] text-white text-sm font-medium py-2 px-4 rounded-md hover:bg-[#0101a0] transition-colors"
-                    >
-                      View All Blogs
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 ml-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </Link>
-                  </motion.div>
                 </div>
               </motion.div>
             </div>
@@ -282,4 +223,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default AllBlogs;

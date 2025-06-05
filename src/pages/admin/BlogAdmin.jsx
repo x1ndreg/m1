@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const BlogAdmin = () => {
   const [posts, setPosts] = useState([]);
@@ -13,6 +14,7 @@ const BlogAdmin = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPosts();
@@ -83,6 +85,9 @@ const BlogAdmin = () => {
         setSelectedFile(null);
         setPreviewUrl('');
         setEditingId(null);
+        if (savedPost.slug !== currentSlug) {
+          navigate(`/blog/${savedPost.slug}`);
+        }
       } else {
         const errorData = await response.json();
         console.error('Server error:', errorData);
