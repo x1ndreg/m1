@@ -5,6 +5,10 @@ const dotenv = require('dotenv');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 // Load environment variables
 dotenv.config();
@@ -12,8 +16,51 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false
+}));
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
+
+// JWT Secret
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+// Rate limiting for login attempts
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts
+  message: 'Too many login attempts, please try again after 15 minutes'
+});
+
+// Apply rate limiting to login route
+app.use('/api/auth/login', loginLimiter);
+
+// Authentication Middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: 'Token expired' });
+      }
+      return res.status(403).json({ message: 'Invalid token' });
+    }
+    req.user = user;
+    next();
+  });
+};
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -103,7 +150,7 @@ function slugify(text) {
     .replace(/-+$/, '');             // Trim - from end of text
 }
 
-// Routes
+// Protected Routes - Only protect non-GET routes for posts
 app.get('/api/posts', async (req, res) => {
   try {
     const [rows] = await pool.promise().query('SELECT * FROM blog_posts ORDER BY created_at DESC');
@@ -133,8 +180,11 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
 
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
     const slug = slugify(req.body.title);
+    const slug = slugify(req.body.title);
 
     const [result] = await pool.promise().query(
+      'INSERT INTO blog_posts (title, content, image, date, link, slug) VALUES (?, ?, ?, ?, ?, ?)',
+      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug]
       'INSERT INTO blog_posts (title, content, image, date, link, slug) VALUES (?, ?, ?, ?, ?, ?)',
       [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug]
     );
@@ -155,8 +205,11 @@ app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
 
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
     const slug = slugify(req.body.title);
+    const slug = slugify(req.body.title);
 
     await pool.promise().query(
+      'UPDATE blog_posts SET title = ?, content = ?, image = ?, date = ?, link = ?, slug = ? WHERE id = ?',
+      [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug, req.params.id]
       'UPDATE blog_posts SET title = ?, content = ?, image = ?, date = ?, link = ?, slug = ? WHERE id = ?',
       [req.body.title, req.body.content, imageUrl, req.body.date, req.body.link, slug, req.params.id]
     );

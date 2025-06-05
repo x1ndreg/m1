@@ -20,14 +20,30 @@ const BlogAdmin = () => {
     fetchPosts();
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    navigate('/admin/login');
+  };
+
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/posts');
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${API_URL}/api/posts`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
       console.log('Fetched posts:', data);
-      setPosts(data);
+      if (response.ok) {
+        setPosts(data);
+      } else {
+        console.error('Error fetching posts:', data.message);
+        setPosts([]);
+      }
     } catch (error) {
       console.error('Error fetching posts:', error);
+      setPosts([]);
     }
   };
 
@@ -42,6 +58,7 @@ const BlogAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('adminToken');
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('content', formData.content);
@@ -49,25 +66,21 @@ const BlogAdmin = () => {
       formDataToSend.append('link', formData.link);
 
       if (selectedFile) {
-        console.log('Selected file:', selectedFile);
         formDataToSend.append('image', selectedFile);
       } else if (formData.image) {
-        console.log('Existing image:', formData.image);
         formDataToSend.append('image', formData.image);
-      } else {
-        // Handle case where no new file is selected and no existing image is present
-        // You might want to add a default image or handle this case based on your requirements
-        // For now, let's just not append the image field if it's empty
       }
 
       const url = editingId
-        ? `http://localhost:5000/api/posts/${editingId}`
-        : 'http://localhost:5000/api/posts';
+        ? `${API_URL}/api/posts/${editingId}`
+        : `${API_URL}/api/posts`;
       const method = editingId ? 'PUT' : 'POST';
 
-      console.log('Sending request to:', url);
       const response = await fetch(url, {
         method,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formDataToSend,
       });
 
@@ -113,8 +126,12 @@ const BlogAdmin = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/posts/${id}`, {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`${API_URL}/api/posts/${id}`, {
           method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         });
         if (response.ok) {
           fetchPosts();
@@ -133,13 +150,25 @@ const BlogAdmin = () => {
       <div className="h-28"></div>
 
       <div className="container mx-auto px-4">
-        <motion.h1
-          className="text-4xl font-bold text-white mb-12 text-center"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          Blog Admin
-        </motion.h1>
+        <div className="flex justify-between items-center mb-12">
+          <motion.h1
+            className="text-4xl font-bold text-white"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            Blog Admin
+          </motion.h1>
+          <motion.button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md transition-colors"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Logout
+          </motion.button>
+        </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
           <motion.div
