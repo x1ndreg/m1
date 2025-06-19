@@ -411,15 +411,14 @@ export const AppContentProvider = ({ children }) => {
         type: "phone",
         icon: "phone",
         text: "Feel free to call us.",
-        value: "+63 (082) 293 2640"
+        value: "(082) 308 2126"
       },
       {
         type: "address",
         icon: "location",
         text: "We Are located in",
         value: [
-          "Door 5, Block 8, Lot 2, Phase 4, Sectoral Road,",
-          "NHA Bangkal Main Rd, Davao City, 8000"
+          "Ground floor, Cordillera corner Waling-waling street, NHA Bangkal, Davao City"
         ]
       }
     ],
